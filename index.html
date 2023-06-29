@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+</head>
+
+<body>
+
+  <div id="dropdown" class="page_limit">
+    <span>Shows </span>
+    <select id="dropdownsize">
+      <option value="4" selected>4</option>
+      <option value="8">8</option>
+      <option value="12">12</option>
+      <option value="16">16</option>
+      <option value="20">20</option>
+      <option value="24">24</option>
+      <option value="28">28</option>
+      <option value="30">30</option>
+    </select>
+    <span> Products</span>
+  </div>
+
+  <div class="search_bar">
+    <input type="search" placeholder="Search Products Name" id="search-input">
+    <button id="search-button"><i class="fas fa-search"></i></button>
+  </div>
+
+  <div id="mainContainer" class="container"></div>
+
+  <div class="bottom-field">
+    <ul class="pagination" id="pagination-list">
+
+    </ul>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
