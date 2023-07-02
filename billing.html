@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="billing.css">
-  <title>Billing</title>
+  <title>Billing Page</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -14,10 +14,11 @@
   <div class="position-bar">
     <h3 class="position active">Add to Cart</h3>
     <h3 class="position">Billing Section</h3>
-    <h3 class="position">Payment and Placed Order Details</h3>
+    <h3 class="position">Payment</h3>
+    <h3 class="position">Placed Order Details</h3>
   </div>
   <div class="progress-bar">
-    <div class="progress" style="width: 33.33%;"></div>
+    <div class="progress" style="width: 22%;"></div>
   </div>
 
   <button class="go-back-button" id="goBackButton">Go to Cart Page</button>
@@ -25,9 +26,9 @@
   <div class="container">
     <h1 class="billing-heading">Billing Page</h1>
 
-    <div class="billing-container">
+    <div class="billing-container" id="billingContainer">
       <h3>Billing Address</h3>
-      <form id="billingForm">
+      <form>
         <label for="fname"><i class="fa fa-user"></i> First Name</label>
         <input type="text" id="fname" name="firstname" placeholder="Enter First Name" required>
         <label for="lname"><i class="fa fa-user"></i> Last Name</label>
@@ -56,15 +57,13 @@
         <label for="districts"><i class="fa fa-map-marker"></i> District:</label>
         <select name="districts" id="districts" required>
           <option value="" selected>Select a District</option>
-        </select>
-
-        <br><br>
-        <button type="submit">CONFIRM</button>
+        </select><br><br>
+        <button type="button" id="confirm1">CONFIRM</button>
       </form>
     </div>
 
 
-    <div class="payment-details">
+    <div class="payment-details" id="paymentContainer" style="display: none;">
       <h3>Payment Details</h3><br>
       <h4>Choose a payment option:</h4><br>
       <form>
@@ -75,10 +74,12 @@
         <input type="radio" id="paytm" name="payment" value="paytm" required>
         <label for="paytm">Paytm</label><br><br>
         <input type="radio" id="cashOnDelivery" name="payment" value="cashondelivery" required>
-        <label for="cashOnDelivery">Cash on Delivery</label>
+        <label for="cashOnDelivery">Cash on Delivery</label><br><br>
+        <input type="radio" id="creditCardAndDebitCard" name="payment" value="creditCardAndDebitCard" required>
+        <label for="creditCardAndDebitCard">CreditCardAndDebitCard</label><br><br>
+        <button type="button" id="confirm3" style="display: none">Proceed To Pay</button>
 
-        <br><br>
-        <div class="payment-container">
+        <div class="payment-container" id="paymentCards" style="display: none">
           <h4>Accepted Cards</h4>
           <div class="icon-container">
             <i class="fa fa-cc-visa" style="color:navy;"></i>
@@ -86,25 +87,28 @@
             <i class="fa fa-cc-mastercard" style="color:red;"></i>
             <i class="fa fa-cc-discover" style="color:orange;"></i>
           </div>
-          <label for="cname">Name on Card</label>
-          <input type="text" id="cname" name="cardname" placeholder="John More Doe" required>
-          <label for="ccnum">Credit card number</label>
-          <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" required>
-          <label for="expmonth">Expiry Month and Year</label>
-          <input type="month" id="expmonth" name="expmonth" placeholder="September 2018" required>
-          <label for="cvv">CVV</label>
-          <input type="number" id="cvv" name="cvv" placeholder="352" required><br><br>
-          <button>Proceed To Pay</button><br><br>
-          <button type="submit">CONFIRM</button>
-          <br><br>
+          <div id="creditCardContainer">
+            <label for="cname">Name on Card</label>
+            <input type="text" id="cname" name="cardname" placeholder="John More Doe" required>
+            <label for="ccnum">Credit card number</label>
+            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" required>
+            <label for="expmonth">Expiry Month and Year</label>
+            <input type="month" id="expmonth" name="expmonth" placeholder="September 2018" required>
+            <label for="cvv">CVV</label>
+            <input type="number" id="cvv" name="cvv" placeholder="352" required><br>
+            <button type="button" id="confirm2">Proceed To Pay</button>
+            <br><br>
+          </div>
         </div>
       </form>
     </div>
 
-    <div class="orderConfirmationPage">
+    <div class="orderConfirmationPage" id="confirmationContainer" style="display: none;">
       <h3>Order Confirmation Page</h3>
-      <p>If you click on confirm,Shipping address same as billing your order details will be taken as confirmed.</p>
-      <button>Confirm</button><br><br>
+      <label>
+        <input type="checkbox" id="checkboxProgressBar" name="sameadr">&nbsp;
+        Shipping address will be same as Billing address, your order details will be taken as confirmed.
+      </label><br><br>
       <p>Click on Place order to place your order.</p>
       <button id="placeOrderButton">Place Order</button>
       <br><br>

@@ -1,4 +1,3 @@
-
 let stateSelect = document.getElementById("states");
 let districtSelect = document.getElementById("districts");
 let goBackButton = document.getElementById("goBackButton");
@@ -6,14 +5,104 @@ let modal = document.getElementById("modal");
 let closeModal = document.getElementsByClassName("close")[0];
 let goToShoppingButton = document.getElementById("goToShoppingButton");
 let placeOrderButton = document.getElementById("placeOrderButton");
+let creditCardAndDebitCard = document.getElementById("creditCardAndDebitCard");
+let paymentCards = document.getElementById("paymentCards");
+let confirmButton1 = document.getElementById("confirm1");
+let confirmButton2 = document.getElementById("confirm2");
+let confirmButton3 = document.getElementById("confirm3");
+let paymentContainer = document.getElementById("paymentContainer");
+let confirmationContainer = document.getElementById("confirmationContainer");
+let progress = document.querySelector(".progress");
+let googlepay = document.getElementById("googlepay");
+let phonepay = document.getElementById("phonepay");
+let paytm = document.getElementById("paytm");
+let cashOnDelivery = document.getElementById("cashOnDelivery");
+let checkboxProgressBar = document.getElementById("checkboxProgressBar");
 
+cashOnDelivery.addEventListener("click", () => {
+  if (cashOnDelivery.checked) {
+    confirmButton3.style.display = "block";
+    paymentCards.style.display = "none";
+  } else {
+    confirmButton3.style.display = "none";
+  }
+});
+
+googlepay.addEventListener("click", () => {
+  if (googlepay.checked) {
+    confirmButton3.style.display = "block";
+    paymentCards.style.display = "none";
+  } else {
+    confirmButton3.style.display = "none";
+  }
+});
+
+phonepay.addEventListener("click", () => {
+  if (phonepay.checked) {
+    confirmButton3.style.display = "block";
+    paymentCards.style.display = "none";
+  } else {
+    confirmButton3.style.display = "none";
+  }
+});
+
+paytm.addEventListener("click", () => {
+  if (paytm.checked) {
+    confirmButton3.style.display = "block";
+    paymentCards.style.display = "none";
+  } else {
+    confirmButton3.style.display = "none";
+  }
+});
+
+confirmButton1.addEventListener("click", () => {
+  if (validateForm()) {
+    paymentContainer.style.display = "block";
+    updateProgressBar(50);
+  } else {
+    paymentContainer.style.display = "none";
+    confirmationContainer.style.display = "none";
+  }
+});
+
+confirmButton2.addEventListener("click", () => {
+  if (validateForm2()) {
+    confirmationContainer.style.display = "block";
+    updateProgressBar(72);
+  } else {
+    confirmationContainer.style.display = "none";
+  }
+});
+
+confirmButton3.addEventListener("click", () => {
+  confirmationContainer.style.display = "block";
+  updateProgressBar(72);
+});
+
+checkboxProgressBar.addEventListener("change", () => {
+  if (checkboxProgressBar.checked) {
+    updateProgressBar(100);
+  }
+});
 
 stateSelect.addEventListener("change", () => {
   let selectedState = stateSelect.value;
   updateDistrictOptions(selectedState);
 });
 
+creditCardAndDebitCard.addEventListener("click", () => {
+  if (creditCardAndDebitCard.checked) {
+    paymentCards.style.display = "block";
+  } else {
+    paymentCards.style.display = "none";
+  }
+});
+
 goBackButton.addEventListener("click", () => {
+  // history.pushState(null, null, location.href);
+  // window.onpopstate = () => {
+  //   history.go(0);
+  // };
   window.location.href = "cart.html";
 });
 
@@ -22,6 +111,11 @@ closeModal.addEventListener("click", () => {
 });
 
 goToShoppingButton.addEventListener("click", () => {
+  // history.pushState(null, null, location.href);
+  // window.onpopstate = () => {
+  //   history.go(0);
+  // };
+  sessionStorage.removeItem("cartItems");
   closeModalFunction();
   window.location.href = "index.html";
 });
@@ -33,9 +127,11 @@ placeOrderButton.addEventListener("click", () => {
 });
 
 function validateForm() {
-  let name = document.getElementById("fname").value.trim();
-  let email = document.getElementById("email").value.trim();
+  let fname = document.getElementById("fname").value.trim();
+  let lname = document.getElementById("lname").value.trim();
   let phone = document.getElementById("mobile").value.trim();
+  let alternatemobile = document.getElementById("alternatemobile").value.trim();
+  let email = document.getElementById("email").value.trim();
   let address = document.getElementById("adr").value.trim();
   let selectedState = stateSelect.value;
   let selectedDistrict = districtSelect.value;
@@ -44,24 +140,52 @@ function validateForm() {
   let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   let phoneRegex = /^\d{10}$/;
 
-  if (name === "" || email === "" || phone === "" || address === "" || selectedState === "" || selectedDistrict === "") {
-    alert("Please fill in all the fields.");
+  if (
+    fname === "" ||
+    lname === "" ||
+    email === "" ||
+    phone === "" ||
+    alternatemobile === "" ||
+    selectedState === "" ||
+    selectedDistrict === ""
+  ) {
+    alert("Please fill in all the fields in Billing Address.");
     return false;
   }
 
-  if (!name.match(nameRegex)) {
-    alert("Please enter a valid name.");
+  if (!fname.match(nameRegex)) {
+    document.getElementById("fname").style.border = "thick solid red";
     return false;
+  } else {
+    document.getElementById("fname").style.border = "1px solid #ccc";
   }
 
-  if (!email.match(emailRegex)) {
-    alert("Please enter a valid email address.");
+  if (!lname.match(nameRegex)) {
+    document.getElementById("lname").style.border = "thick solid red";
     return false;
+  } else {
+    document.getElementById("lname").style.border = "1px solid #ccc";
   }
 
   if (!phone.match(phoneRegex)) {
-    alert("Please enter a valid 10-digit phone number.");
+    document.getElementById("mobile").style.border = "thick solid red";
     return false;
+  } else {
+    document.getElementById("mobile").style.border = "1px solid #ccc";
+  }
+
+  if (!alternatemobile.match(phoneRegex)) {
+    document.getElementById("alternatemobile").style.border = "thick solid red";
+    return false;
+  } else {
+    document.getElementById("alternatemobile").style.border = "1px solid #ccc";
+  }
+
+  if (!email.match(emailRegex)) {
+    document.getElementById("email").style.border = "thick solid red";
+    return false;
+  } else {
+    document.getElementById("email").style.border = "1px solid #ccc";
   }
 
   if (address === "") {
@@ -82,8 +206,52 @@ function validateForm() {
   return true;
 }
 
+function validateForm2() {
+  let cardName = document.getElementById("cname").value.trim();
+  let cardNumber = document.getElementById("ccnum").value.trim();
+  let cvvNumber = document.getElementById("cvv").value.trim();
+  let expmonth = document.getElementById("expmonth").value.trim();
+
+  let creditCardNameRegex = /^[a-zA-Z]+ [a-zA-Z]+$/;
+  let creditCardNumberRegex = /\b\d{4}-\d{4}-\d{4}-\d{4}\b/;
+  let creditCardCVVRegex = /^\d{3}$/;
+
+  if (cardName === "" || cardNumber === "" || cvvNumber === "") {
+    alert("Please fill in all the fields in Payment Details.");
+    return false;
+  }
+
+  if (expmonth === "") {
+    alert("Please enter your expected Month and Year.");
+    return false;
+  }
+
+  if (!cardName.match(creditCardNameRegex)) {
+    document.getElementById("cname").style.border = "thick solid red";
+    return false;
+  } else {
+    document.getElementById("cname").style.border = "1px solid #ccc";
+  }
+
+  if (!cardNumber.match(creditCardNumberRegex)) {
+    document.getElementById("ccnum").style.border = "thick solid red";
+    return false;
+  } else {
+    document.getElementById("ccnum").style.border = "1px solid #ccc";
+  }
+
+  if (!cvvNumber.match(creditCardCVVRegex)) {
+    document.getElementById("cvv").style.border = "thick solid red";
+    return false;
+  } else {
+    document.getElementById("cvv").style.border = "1px solid #ccc";
+  }
+
+  return true;
+}
+
 function updateDistrictOptions(selectedState) {
-  districtSelect.innerHTML = ""; // Clear district dropdown
+  districtSelect.innerHTML = "";
 
   if (selectedState === "Andhra Pradesh") {
     addDistrictOption("East Godavari");
@@ -113,6 +281,10 @@ function addDistrictOption(district) {
   option.value = district;
   option.textContent = district;
   districtSelect.appendChild(option);
+}
+
+function updateProgressBar(percentage) {
+  progress.style.width = `${percentage}%`;
 }
 
 function showModal() {

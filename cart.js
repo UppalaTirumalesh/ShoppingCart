@@ -1,63 +1,63 @@
-let cartContainer = document.getElementById('cartContainer');
-let subTotalValue = document.getElementById('subTotalValue');
-let taxValue = document.getElementById('taxValue');
-let grandTotalValue = document.getElementById('grandTotalValue');
-let checkoutButton = document.getElementById('checkoutButton');
-let goBackButton = document.getElementById('goBackButton');
+let cartContainer = document.getElementById("cartContainer");
+let subTotalValue = document.getElementById("subTotalValue");
+let taxValue = document.getElementById("taxValue");
+let grandTotalValue = document.getElementById("grandTotalValue");
+let checkoutButton = document.getElementById("checkoutButton");
+let goBackButton = document.getElementById("goBackButton");
 
-let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
 function renderCartItems() {
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
   } else {
-    cartContainer.innerHTML = '';
+    cartContainer.innerHTML = "";
 
     cartItems.forEach((product) => {
-      const productElement = document.createElement('div');
-      productElement.classList.add('cart-product');
+      const productElement = document.createElement("div");
+      productElement.classList.add("cart-product");
 
-      const thumbnailElement = document.createElement('img');
-      thumbnailElement.classList.add('cart-product-thumbnail');
+      const thumbnailElement = document.createElement("img");
+      thumbnailElement.classList.add("cart-product-thumbnail");
       thumbnailElement.src = product.thumbnail;
-      thumbnailElement.alt = 'Image failed to load';
+      thumbnailElement.alt = "Image failed to load";
 
-      const detailsElement = document.createElement('div');
-      detailsElement.classList.add('cart-product-details');
+      const detailsElement = document.createElement("div");
+      detailsElement.classList.add("cart-product-details");
 
-      const titleElement = document.createElement('h2');
+      const titleElement = document.createElement("h2");
       titleElement.innerText = product.title;
 
-      const descriptionElement = document.createElement('p');
-      descriptionElement.classList.add('cart-product-description');
+      const descriptionElement = document.createElement("p");
+      descriptionElement.classList.add("cart-product-description");
       descriptionElement.innerText = product.description;
 
-      const priceElement = document.createElement('h4');
-      priceElement.classList.add('cart-product-price');
+      const priceElement = document.createElement("h4");
+      priceElement.classList.add("cart-product-price");
       priceElement.innerText = `Price: $${product.price}`;
 
-      const quantityElement = document.createElement('div');
-      quantityElement.classList.add('cart-product-quantity');
+      const quantityElement = document.createElement("div");
+      quantityElement.classList.add("cart-product-quantity");
 
-      const quantityLabelElement = document.createElement('label');
-      quantityLabelElement.setAttribute('for', `quantity-${product.id}`);
-      quantityLabelElement.innerText = 'Quantity: ';
+      const quantityLabelElement = document.createElement("label");
+      quantityLabelElement.setAttribute("for", `quantity-${product.id}`);
+      quantityLabelElement.innerText = "Quantity: ";
 
-      const quantityInput = document.createElement('input');
-      quantityInput.setAttribute('type', 'number');
-      quantityInput.setAttribute('min', '1');
-      quantityInput.setAttribute('value', product.quantity);
-      quantityInput.setAttribute('id', `quantity-${product.id}`);
-      quantityInput.style.width = '50px';
-      quantityInput.addEventListener('input', (e) => {
+      const quantityInput = document.createElement("input");
+      quantityInput.setAttribute("type", "number");
+      quantityInput.setAttribute("min", "1");
+      quantityInput.setAttribute("value", product.quantity);
+      quantityInput.setAttribute("id", `quantity-${product.id}`);
+      quantityInput.style.width = "50px";
+      quantityInput.addEventListener("input", (e) => {
         const newQuantity = parseInt(e.target.value);
         updateCart(product.id, newQuantity);
       });
 
-      const removeButton = document.createElement('button');
-      removeButton.classList.add('cart-product-remove');
-      removeButton.innerText = 'Remove';
-      removeButton.addEventListener('click', () => {
+      const removeButton = document.createElement("button");
+      removeButton.classList.add("cart-product-remove");
+      removeButton.innerText = "Remove";
+      removeButton.addEventListener("click", () => {
         removeFromCart(product.id);
       });
 
@@ -80,15 +80,19 @@ function renderCartItems() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   renderCartItems();
 
-  goBackButton.addEventListener('click', () => {
-    window.location.href = 'index.html';
+  goBackButton.addEventListener("click", () => {
+    // history.pushState(null, null, location.href);
+    // window.onpopstate = () => {
+    //   history.go(0);
+    // };
+    window.location.href = "index.html";
   });
 
-  checkoutButton.addEventListener('click', () => {
-    window.location.href = 'billing.html';
+  checkoutButton.addEventListener("click", () => {
+    window.location.href = "billing.html";
   });
 });
 
@@ -100,14 +104,14 @@ function updateCart(productId, quantity) {
     return item;
   });
   cartItems = updatedItems;
-  sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+  sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
   calculateCartTotal();
   renderCartItems();
 }
 
 function removeFromCart(productId) {
   cartItems = cartItems.filter((item) => item.id !== productId);
-  sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+  sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
   } else {
@@ -129,5 +133,3 @@ function calculateCartTotal() {
   taxValue.innerText = `$${tax.toFixed(2)}`;
   grandTotalValue.innerText = `$${grandTotal.toFixed(2)}`;
 }
-
-
