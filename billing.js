@@ -1,3 +1,4 @@
+let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 let stateSelect = document.getElementById("states");
 let districtSelect = document.getElementById("districts");
 let goBackButton = document.getElementById("goBackButton");
@@ -18,6 +19,12 @@ let phonepay = document.getElementById("phonepay");
 let paytm = document.getElementById("paytm");
 let cashOnDelivery = document.getElementById("cashOnDelivery");
 let checkboxProgressBar = document.getElementById("checkboxProgressBar");
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (cartItems.length === 0) {
+    window.location.href = "index.html";
+  }
+});
 
 cashOnDelivery.addEventListener("click", () => {
   if (cashOnDelivery.checked) {
@@ -81,7 +88,9 @@ confirmButton3.addEventListener("click", () => {
 
 checkboxProgressBar.addEventListener("change", () => {
   if (checkboxProgressBar.checked) {
-    updateProgressBar(100);
+    placeOrderButton.style.display = "block";
+  } else {
+    placeOrderButton.style.display = "none";
   }
 });
 
@@ -99,10 +108,6 @@ creditCardAndDebitCard.addEventListener("click", () => {
 });
 
 goBackButton.addEventListener("click", () => {
-  // history.pushState(null, null, location.href);
-  // window.onpopstate = () => {
-  //   history.go(0);
-  // };
   window.location.href = "cart.html";
 });
 
@@ -111,18 +116,21 @@ closeModal.addEventListener("click", () => {
 });
 
 goToShoppingButton.addEventListener("click", () => {
-  // history.pushState(null, null, location.href);
-  // window.onpopstate = () => {
-  //   history.go(0);
-  // };
   sessionStorage.removeItem("cartItems");
   closeModalFunction();
   window.location.href = "index.html";
 });
 
+history.pushState(null, null, location.href);
+window.onpopstate = () => {
+  window.location.href = "index.html";
+};
+
 placeOrderButton.addEventListener("click", () => {
   if (validateForm()) {
     showModal();
+    updateProgressBar(100);
+    sessionStorage.removeItem("cartItems");
   }
 });
 

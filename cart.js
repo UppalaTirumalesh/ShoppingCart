@@ -4,12 +4,12 @@ let taxValue = document.getElementById("taxValue");
 let grandTotalValue = document.getElementById("grandTotalValue");
 let checkoutButton = document.getElementById("checkoutButton");
 let goBackButton = document.getElementById("goBackButton");
-
 let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
 function renderCartItems() {
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
+    checkoutButton.style.display = "none";
   } else {
     cartContainer.innerHTML = "";
 
@@ -77,17 +77,18 @@ function renderCartItems() {
     });
 
     calculateCartTotal();
+    checkoutButton.style.display = "block";
   }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  if (cartItems.length === 0) {
+    window.location.href = "index.html";
+  }
+
   renderCartItems();
 
   goBackButton.addEventListener("click", () => {
-    // history.pushState(null, null, location.href);
-    // window.onpopstate = () => {
-    //   history.go(0);
-    // };
     window.location.href = "index.html";
   });
 
@@ -114,6 +115,7 @@ function removeFromCart(productId) {
   sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
+    checkoutButton.style.display = "none";
   } else {
     renderCartItems();
   }

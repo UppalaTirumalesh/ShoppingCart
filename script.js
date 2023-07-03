@@ -7,7 +7,7 @@ let searchButton = document.getElementById("search-button");
 
 let currentPage = 1;
 let productsPerPage = parseInt(dropdownsize.value);
-let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 let currentProducts = [];
 let productsList = [];
 let totalPages;
@@ -41,17 +41,28 @@ function renderProducts(productsList) {
     content.innerHTML = "";
     productsList.forEach((product) => {
       let out = `<div class="boxes"> 
-          <a class="download-link" href="#" download="product_thumbnail.jpg">
+          <a class="download-link" href="#" onclick="downloadImage('${
+            product.thumbnail
+          }', '${product.title}');">
             <i class="fas fa-download" id="fontAwesomeIcon"></i>
           </a>
-          <img class="images" src="${product.thumbnail}" alt="Image failed to load"/>
+          <img class="images" src="${
+            product.thumbnail
+          }" alt="Image failed to load"/>
           <h2>${product.title}</h2>
           <p class="tooltip">
             <span class="tooltip-content">${product.description}</span>
-            ${product.description.slice(0, 50)}${product.description.length > 50 ? "..." : ""}
+            ${product.description.slice(0, 50)}${
+        product.description.length > 50 ? "..." : ""
+      }
           </p>
           <h3>${"$" + product.price}</h3>
-          <button class="button" onclick="addToCart('${product.id}', '${product.price}', '${product.thumbnail}', '${product.description.replace("'", "\\'")}', '${product.title.replace("'", "\\'")}')">ADD TO CART</button>
+          <button class="button" onclick="addToCart('${product.id}', '${
+        product.price
+      }', '${product.thumbnail}', '${product.description.replace(
+        "'",
+        "\\'"
+      )}', '${product.title.replace("'", "\\'")}')">ADD TO CART</button>
       </div>`;
       content.innerHTML += out;
     });
@@ -65,7 +76,7 @@ dropdownsize.onchange = function () {
   currentProducts = productsList.slice(0, recordsPerPage);
   renderProducts(currentProducts);
   renderPagination(totalPages, currentPage);
-}
+};
 
 function performSearch(searchTerm) {
   let filteredProducts = productsList.filter((product) => {
@@ -83,7 +94,7 @@ search_bar.oninput = function (event) {
   currentProducts = filteredProducts.slice(0, productsPerPage);
   renderProducts(currentProducts);
   renderPagination(totalPages, currentPage);
-}
+};
 
 searchButton.onclick = function () {
   let searchTerm = searchInput.value.toLowerCase();
@@ -92,7 +103,7 @@ searchButton.onclick = function () {
   currentProducts = filteredProducts.slice(0, productsPerPage);
   renderProducts(currentProducts);
   renderPagination(totalPages, currentPage);
-}
+};
 
 function renderPagination(totalPages, currentPage) {
   let paginationHTML = "";
@@ -124,7 +135,7 @@ function renderPagination(totalPages, currentPage) {
       currentProducts = productsList.slice(startIndex, endIndex);
       renderProducts(currentProducts);
       renderPagination(totalPages, currentPage);
-    }
+    };
   });
 
   let prevButton = document.getElementById("prev");
@@ -140,7 +151,7 @@ function renderPagination(totalPages, currentPage) {
       renderProducts(currentProducts);
       renderPagination(totalPages, currentPage);
     }
-  }
+  };
 
   nextButton.onclick = function (e) {
     e.preventDefault();
@@ -152,7 +163,22 @@ function renderPagination(totalPages, currentPage) {
       renderProducts(currentProducts);
       renderPagination(totalPages, currentPage);
     }
-  }
+  };
+}
+
+function downloadImage(imageUrl, title) {
+  fetch(imageUrl)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = `${title}.png`;
+      downloadLink.click();
+      URL.revokeObjectURL(downloadLink.href);
+    })
+    .catch((error) => {
+      console.error("Error downloading image:", error);
+    });
 }
 
 function addToCart(id, price, thumbnail, description, title) {
@@ -167,17 +193,17 @@ function addToCart(id, price, thumbnail, description, title) {
       quantity: 1,
       thumbnail: thumbnail,
       description: description,
-      title: title
+      title: title,
     };
     cartItems.push(cartProduct);
   }
 
-  sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
-  console.log('Item added to cart:', cartItems);
+  sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+  console.log("Item added to cart:", cartItems);
   redirectToCart();
 }
 
 function redirectToCart() {
-  const url = 'cart.html';
+  const url = "cart.html";
   window.location.href = url;
 }
