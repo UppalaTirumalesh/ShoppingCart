@@ -116,7 +116,6 @@ function removeFromCart(productId) {
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
     checkoutButton.style.display = "none";
-    window.location.href = "index.html";
   } else {
     renderCartItems();
   }
