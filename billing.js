@@ -11,6 +11,7 @@ let paymentCards = document.getElementById("paymentCards");
 let confirmButton1 = document.getElementById("confirm1");
 let confirmButton2 = document.getElementById("confirm2");
 let confirmButton3 = document.getElementById("confirm3");
+let billingContainer = document.getElementById("billingContainer");
 let paymentContainer = document.getElementById("paymentContainer");
 let confirmationContainer = document.getElementById("confirmationContainer");
 let progress = document.querySelector(".progress");
@@ -64,16 +65,18 @@ paytm.addEventListener("click", () => {
 
 confirmButton1.addEventListener("click", () => {
   if (validateForm()) {
-    paymentContainer.style.display = "block";
-    updateProgressBar(50);
+    billingContainer.style.display = 'none';
+    paymentContainer.style.display = 'block';
+    updateProgressBar(30);
   } else {
-    paymentContainer.style.display = "none";
-    confirmationContainer.style.display = "none";
-  }
+      paymentContainer.style.display = 'none';
+      confirmationContainer.style.display = 'block';
+    }
 });
 
 confirmButton2.addEventListener("click", () => {
   if (validateForm2()) {
+    paymentContainer.style.display = 'none';
     confirmationContainer.style.display = "block";
     updateProgressBar(72);
   } else {
@@ -82,6 +85,7 @@ confirmButton2.addEventListener("click", () => {
 });
 
 confirmButton3.addEventListener("click", () => {
+  paymentContainer.style.display = 'none';
   confirmationContainer.style.display = "block";
   updateProgressBar(72);
 });
@@ -301,4 +305,5 @@ function showModal() {
 
 function closeModalFunction() {
   modal.style.display = "none";
+  updateProgressBar(72);
 }

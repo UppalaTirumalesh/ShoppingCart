@@ -13,6 +13,11 @@ let productsList = [];
 let totalPages;
 let recordsPerPage;
 
+window.addEventListener("DOMContentLoaded", (event) => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+
 (async function () {
   try {
     const response = await fetch("https://dummyjson.com/products");
@@ -48,12 +53,12 @@ function renderProducts(productsList) {
           </a>
           <img class="images" src="${
             product.thumbnail
-          }" alt="Image failed to load"/>
+          }" width="100" height="90" alt="Image failed to load"/>
           <h2>${product.title}</h2>
           <p class="tooltip">
             <span class="tooltip-content">${product.description}</span>
-            ${product.description.slice(0, 50)}${
-        product.description.length > 50 ? "..." : ""
+            ${product.description.slice(0, 25)}${
+        product.description.length > 25 ? "..." : ""
       }
           </p>
           <h3>${"$" + product.price}</h3>
@@ -128,6 +133,8 @@ function renderPagination(totalPages, currentPage) {
   pageLinks.forEach((link) => {
     link.onclick = function (e) {
       e.preventDefault();
+       window.scrollTo({ top: 0, behavior: 'smooth' });
+
       let clickedPage = parseInt(e.target.getAttribute("data-page"));
       currentPage = clickedPage;
       let startIndex = (currentPage - 1) * productsPerPage;

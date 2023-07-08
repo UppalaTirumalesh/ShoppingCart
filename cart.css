@@ -59,26 +59,30 @@ h1{
 .cart-details h2 {
   margin-bottom: 10px;
 }
+.images{
+   width:230px;
+}
 
 .go-back-button {
   position: fixed;
   top: 20px;
   right: 20px;
   padding: 10px 20px;
-  background-color: aquamarine;
+  background-color:  #007bff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  outline: none;
 }
 
 button {
   cursor: pointer;
-  padding: 7px;
-  background-color: gray;
+  padding: 10px 20px;
+  background-color: #007bff;
   color: white;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 10px;
 }
 
 #checkoutButton {

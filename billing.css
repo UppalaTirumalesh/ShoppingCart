@@ -14,13 +14,12 @@ body {
   right: 20px;
   padding: 10px 20px;
   margin-top: 60px;
-  background-color: rgb(143, 14, 235);
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  outline: none;
 }
 
 .position-bar {

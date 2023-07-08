@@ -14,55 +14,73 @@ function renderCartItems() {
     cartContainer.innerHTML = "";
 
     cartItems.forEach((product) => {
-      const productElement = document.createElement("div");
-      productElement.classList.add("cart-product");
+      let productElement = document.createElement('div');
+      productElement.classList.add('cart-product');
 
-      const thumbnailElement = document.createElement("img");
-      thumbnailElement.classList.add("cart-product-thumbnail");
+      let thumbnailElement = document.createElement('img');
+      thumbnailElement.classList.add('cart-product-thumbnail');
       thumbnailElement.src = product.thumbnail;
-      thumbnailElement.alt = "Image failed to load";
+      thumbnailElement.alt = 'Image failed to load';
 
-      const detailsElement = document.createElement("div");
-      detailsElement.classList.add("cart-product-details");
+      let detailsElement = document.createElement('div');
+      detailsElement.classList.add('cart-product-details');
 
-      const titleElement = document.createElement("h2");
+      let titleElement = document.createElement('h2');
       titleElement.innerText = product.title;
 
-      const descriptionElement = document.createElement("p");
-      descriptionElement.classList.add("cart-product-description");
+      let descriptionElement = document.createElement('p');
+      descriptionElement.classList.add('cart-product-description');
       descriptionElement.innerText = product.description;
 
-      const priceElement = document.createElement("h4");
-      priceElement.classList.add("cart-product-price");
+      let priceElement = document.createElement('h4');
+      priceElement.classList.add('cart-product-price');
       priceElement.innerText = `Price: $${product.price}`;
 
-      const quantityElement = document.createElement("div");
-      quantityElement.classList.add("cart-product-quantity");
+      let quantityElement = document.createElement('div');
+      quantityElement.classList.add('cart-product-quantity');
 
-      const quantityLabelElement = document.createElement("label");
-      quantityLabelElement.setAttribute("for", `quantity-${product.id}`);
-      quantityLabelElement.innerText = "Quantity: ";
+      let quantityLabelElement = document.createElement('label');
+      quantityLabelElement.setAttribute('for', `quantity-${product.id}`);
+      quantityLabelElement.innerText = 'Quantity: ';
 
-      const quantityInput = document.createElement("input");
-      quantityInput.setAttribute("type", "number");
-      quantityInput.setAttribute("min", "1");
-      quantityInput.setAttribute("value", product.quantity);
-      quantityInput.setAttribute("id", `quantity-${product.id}`);
-      quantityInput.style.width = "50px";
-      quantityInput.addEventListener("input", (e) => {
-        const newQuantity = parseInt(e.target.value);
+      let decreaseButton = document.createElement('button');
+      decreaseButton.innerText = '-';
+      decreaseButton.style.padding= '5px';
+      decreaseButton.addEventListener('click', () => {
+        let newQuantity = Math.max(1, product.quantity - 1);
         updateCart(product.id, newQuantity);
       });
 
-      const removeButton = document.createElement("button");
-      removeButton.classList.add("cart-product-remove");
-      removeButton.innerText = "Remove";
-      removeButton.addEventListener("click", () => {
+      let quantityInput = document.createElement('input');
+      quantityInput.setAttribute('type', 'number');
+      quantityInput.setAttribute('min', '1');
+      quantityInput.setAttribute('value', product.quantity);
+      quantityInput.setAttribute('id', `quantity-${product.id}`);
+      quantityInput.style.width = '50px';
+      quantityInput.addEventListener('input', (e) => {
+        let newQuantity = parseInt(e.target.value);
+        updateCart(product.id, newQuantity);
+      });
+
+      let increaseButton = document.createElement('button');
+      increaseButton.innerText = '+';
+      increaseButton.style.padding= '5px';
+      increaseButton.addEventListener('click', () => {
+        let newQuantity = product.quantity + 1;
+        updateCart(product.id, newQuantity);
+      });
+
+      let removeButton = document.createElement('button');
+      removeButton.classList.add('cart-product-remove');
+      removeButton.innerText = 'Remove';
+      removeButton.addEventListener('click', () => {
         removeFromCart(product.id);
       });
 
       quantityElement.appendChild(quantityLabelElement);
+      quantityElement.appendChild(decreaseButton);
       quantityElement.appendChild(quantityInput);
+      quantityElement.appendChild(increaseButton);
 
       detailsElement.appendChild(titleElement);
       detailsElement.appendChild(descriptionElement);
@@ -81,6 +99,26 @@ function renderCartItems() {
   }
 }
 
+let inactivityTime;
+function clearSessionStorageAndHideCart() {
+  sessionStorage.clear();
+  cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
+  checkoutButton.style.display = "none";
+}
+
+function resetinactivityTime() {
+  clearTimeout(inactivityTime);
+  inactivityTime = setTimeout(clearSessionStorageAndHideCart, 5000);
+  calculateCartTotal();
+  renderCartItems();
+}
+
+window.addEventListener("mousemove", resetinactivityTime);
+window.addEventListener("keydown", resetinactivityTime);
+window.addEventListener("click", resetinactivityTime);
+
+resetinactivityTime();
+
 window.addEventListener("DOMContentLoaded", () => {
   if (cartItems.length === 0) {
     window.location.href = "index.html";
@@ -98,7 +136,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateCart(productId, quantity) {
-  const updatedItems = cartItems.map((item) => {
+  let updatedItems = cartItems.map((item) => {
     if (item.id === productId) {
       item.quantity = quantity;
     }
