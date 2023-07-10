@@ -13,10 +13,25 @@ let productsList = [];
 let totalPages;
 let recordsPerPage;
 
-window.addEventListener("DOMContentLoaded", (event) => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+window.addEventListener("DOMContentLoaded", () => {
+  window.scrollTo({ top: 0 });
+  paginationList = document.getElementById("pagination-list");
+  renderPagination(totalPages, currentPage);
 });
 
+function initializeApp() {
+  paginationList = document.getElementById("pagination-list");
+
+  renderProducts(currentProducts);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeApp();
+
+  setTimeout(() => {
+    renderPagination(totalPages, currentPage);
+  }, 100);
+});
 
 (async function () {
   try {
@@ -53,7 +68,7 @@ function renderProducts(productsList) {
           </a>
           <img class="images" src="${
             product.thumbnail
-          }" width="100" height="90" alt="Image failed to load"/>
+          }" width="250px" height="150px" alt="Image failed to load"/>
           <h2>${product.title}</h2>
           <p class="tooltip">
             <span class="tooltip-content">${product.description}</span>
@@ -111,10 +126,12 @@ searchButton.onclick = function () {
 };
 
 function renderPagination(totalPages, currentPage) {
-  let paginationHTML = "";
+  try {
+    let paginationHTML = "";
 
-  if (totalPages > 0) {
-    paginationHTML += `<li class="prev"><a href="#" id="prev">&#139;</a></li>`;
+    if (totalPages > 0) {
+      paginationHTML += `<li class="prev"><a href="#" id="prev">&#139;</a></li>`;
+    }
 
     for (let i = 1; i <= totalPages; i++) {
       if (i === currentPage) {
@@ -123,54 +140,60 @@ function renderPagination(totalPages, currentPage) {
         paginationHTML += `<li class="list"><a href="#" data-page="${i}">${i}</a></li>`;
       }
     }
-
     paginationHTML += `<li class="next"><a href="#" id="next">&#155;</a></li>`;
-  }
+    paginationList.innerHTML = paginationHTML;
 
-  paginationList.innerHTML = paginationHTML;
+    let pageLinks = paginationList.querySelectorAll("a[data-page]");
+    pageLinks.forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0 });
 
-  let pageLinks = paginationList.querySelectorAll("a[data-page]");
-  pageLinks.forEach((link) => {
-    link.onclick = function (e) {
+        let clickedPage = parseInt(e.target.getAttribute("data-page"));
+        currentPage = clickedPage;
+        let startIndex = (currentPage - 1) * productsPerPage;
+        let endIndex = startIndex + productsPerPage;
+        currentProducts = productsList.slice(startIndex, endIndex);
+        renderProducts(currentProducts);
+        renderPagination(totalPages, currentPage);
+      });
+    });
+
+    let prevButton = document.getElementById("prev");
+    let nextButton = document.getElementById("next");
+
+    prevButton.addEventListener("click", function (e) {
       e.preventDefault();
-       window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      let clickedPage = parseInt(e.target.getAttribute("data-page"));
-      currentPage = clickedPage;
-      let startIndex = (currentPage - 1) * productsPerPage;
-      let endIndex = startIndex + productsPerPage;
-      currentProducts = productsList.slice(startIndex, endIndex);
-      renderProducts(currentProducts);
-      renderPagination(totalPages, currentPage);
-    };
-  });
-
-  let prevButton = document.getElementById("prev");
-  let nextButton = document.getElementById("next");
-
-  prevButton.onclick = function (e) {
-    e.preventDefault();
-    if (currentPage > 1) {
-      currentPage--;
-      let startIndex = (currentPage - 1) * productsPerPage;
-      let endIndex = startIndex + productsPerPage;
-      currentProducts = productsList.slice(startIndex, endIndex);
-      renderProducts(currentProducts);
-      renderPagination(totalPages, currentPage);
+      if (currentPage > 1) {
+        currentPage--;
+        let startIndex = (currentPage - 1) * productsPerPage;
+        let endIndex = startIndex + productsPerPage;
+        currentProducts = productsList.slice(startIndex, endIndex);
+        renderProducts(currentProducts);
+        renderPagination(totalPages, currentPage);
+      }
+    });
+    if (currentPage === 1) {
+      prevButton.style.display = "none";
     }
-  };
 
-  nextButton.onclick = function (e) {
-    e.preventDefault();
-    if (currentPage < totalPages) {
-      currentPage++;
-      let startIndex = (currentPage - 1) * productsPerPage;
-      let endIndex = startIndex + productsPerPage;
-      currentProducts = productsList.slice(startIndex, endIndex);
-      renderProducts(currentProducts);
-      renderPagination(totalPages, currentPage);
+    nextButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (currentPage < totalPages) {
+        currentPage++;
+        let startIndex = (currentPage - 1) * productsPerPage;
+        let endIndex = startIndex + productsPerPage;
+        currentProducts = productsList.slice(startIndex, endIndex);
+        renderProducts(currentProducts);
+        renderPagination(totalPages, currentPage);
+      }
+    });
+    if (currentPage === totalPages) {
+      nextButton.style.display = "none";
     }
-  };
+  } catch {
+    console.error("Error in renderPagination:", error);
+  }
 }
 
 function downloadImage(imageUrl, title) {

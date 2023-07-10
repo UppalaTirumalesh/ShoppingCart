@@ -46,6 +46,7 @@ function renderCartItems() {
       let decreaseButton = document.createElement('button');
       decreaseButton.innerText = '-';
       decreaseButton.style.padding= '5px';
+      decreaseButton.style.marginRight= '5px';
       decreaseButton.addEventListener('click', () => {
         let newQuantity = Math.max(1, product.quantity - 1);
         updateCart(product.id, newQuantity);
@@ -65,6 +66,7 @@ function renderCartItems() {
       let increaseButton = document.createElement('button');
       increaseButton.innerText = '+';
       increaseButton.style.padding= '5px';
+      increaseButton.style.marginLeft= '5px';
       increaseButton.addEventListener('click', () => {
         let newQuantity = product.quantity + 1;
         updateCart(product.id, newQuantity);
@@ -108,7 +110,7 @@ function clearSessionStorageAndHideCart() {
 
 function resetinactivityTime() {
   clearTimeout(inactivityTime);
-  inactivityTime = setTimeout(clearSessionStorageAndHideCart, 5000);
+  inactivityTime = setTimeout(clearSessionStorageAndHideCart, 50000);
   calculateCartTotal();
   renderCartItems();
 }

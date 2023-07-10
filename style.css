@@ -24,10 +24,14 @@ html {
 .boxes {
   border: 2px solid grey;
   padding: 10px;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  display: grid;
   align-items: center;
-  justify-content: center;
+}
+
+.images{
+  padding-top: 15px;
+  object-fit: contain;
 }
 
 .bottom-field {
@@ -53,9 +57,9 @@ html {
 
 .pagination li.active,
 .pagination li:hover {
-  background: #32d6aa;
+  background: #007bff;
   color: white;
-  border-color: #32d6aa;
+  border-color: #007bff;
 }
 
 .pagination li a {
@@ -101,10 +105,6 @@ html {
   max-width: 200px;
 }
 
-.boxes {
-  position: relative;
-}
-
 .button {
   padding: 10px 20px;
   background-color: #007bff;
@@ -122,23 +122,26 @@ html {
 }
 
 .search_bar {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .search_bar input[type="search"] {
   width: 500px;
   height: 45px;
-  padding: 5px;
+   padding: 5px 15px;
   font-size: 16px;
+  border-radius: 25px 0px 0px 25px;
 }
 
 .search_bar button {
   padding: 13px 20px;
-  background-color: #32d6aa;
+  background-color: #007bff;
   border: none;
   color: white;
   cursor: pointer;
-  margin-left: -4px;
+  border-radius: 0px 25px 25px 0px;
 }
 
 .download-link {
