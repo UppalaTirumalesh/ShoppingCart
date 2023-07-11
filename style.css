@@ -42,11 +42,26 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  list-style-type: none;
   margin-bottom: 30px;
+  list-style-type: none;
 }
 
-.pagination li {
+#next {
+  list-style-type: none;
+  padding: 6px 16px;
+  color: #999;
+  border-radius: 5px;
+  list-style-type: none;
+}
+
+#prev {
+  list-style-type: none;
+  padding: 6px 16px;
+  color: #999;
+  border-radius: 5px;
+}
+
+.list {
   list-style-type: none;
   padding: 2px;
   margin: 10px;
@@ -57,8 +72,10 @@ html {
   color: #999;
 }
 
-.pagination li.active,
-.pagination li:hover {
+.list.active,
+#next:hover,
+#prev:hover,
+.list:hover {
   background: #007bff;
   color: white;
   border-color: #007bff;
@@ -72,7 +89,6 @@ html {
   display: block;
   font-family: sans-serif;
   font-size: 22px;
-  list-style-type: none;
 }
 
 .tooltip {
@@ -133,7 +149,7 @@ html {
 
 .search_bar input[type="search"] {
   width: 500px;
-  height: 45px;
+  height: 46px;
   padding: 5px 15px;
   font-size: 16px;
   border-radius: 25px 0px 0px 25px;
@@ -158,11 +174,6 @@ html {
 span.price {
   float: right;
   color: grey;
-}
-
-.pagination {
-  margin-bottom: 30px;
-  list-style-type: none;
 }
 
 @media only screen and (max-width: 992px) {
@@ -204,8 +215,8 @@ span.price {
   }
 
   .boxes {
-    position: relative;
-    width: 250px;
+    /* position: relative; */
+    width: 265px;
   }
 
   .search_bar {
@@ -236,6 +247,10 @@ span.price {
 
   .boxes {
     width: auto;
+  }
+
+  .button{
+    padding: 10px;
   }
 
   .search_bar {

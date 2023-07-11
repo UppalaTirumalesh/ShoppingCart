@@ -79,19 +79,19 @@ paytm.addEventListener("click", () => {
 backButton[0].addEventListener("click", () => {
   paymentContainer.style.display = 'none';
   billingContainer.style.display = 'block';
-  // updateProgressBar(0);
+  updateProgressBar(0);
 });
 
 backButton[1].addEventListener("click", () => {
   paymentContainer.style.display = 'none';
   billingContainer.style.display = 'block';
-  // updateProgressBar(30);
+  updateProgressBar(0);
 });
 
 backButton3.addEventListener("click", () => {
   confirmationContainer.style.display = "none";
   paymentContainer.style.display = 'block';
-  // updateProgressBar(72);
+  updateProgressBar(23);
 });
 
 confirmButton1.addEventListener("click", () => {
@@ -474,10 +474,12 @@ function displayOrderSummary(orderDetails, billingAddress, paymentMethod) {
   editButton.addEventListener("click", () => {
     billingContainer.style.display = 'block';
     confirmationContainer.style.display = 'none';
+    updateProgressBar(0);
   });
   
   closeModal2.addEventListener("click", () => {
     modal2.style.display = "none";
+    updateProgressBar(75);
   });
 
   goToShoppingButton2.addEventListener("click", () => {
@@ -504,12 +506,14 @@ function showModal() {
       sessionStorage.removeItem("cartItems");
       placeOrder();
       closeModalFunction();
+      updateProgressBar(75);
     } 
     });
     
     noValue.addEventListener("click", () => {
       if (noValue.checked) {
         closeModalFunction();
+        updateProgressBar(47);
       } 
     });
 }
@@ -520,5 +524,5 @@ function showModal2() {
 
 function closeModalFunction() {
   modal.style.display = "none";
-  updateProgressBar(72);
+  updateProgressBar(47);
 }

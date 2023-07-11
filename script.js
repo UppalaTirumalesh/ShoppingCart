@@ -4,39 +4,27 @@ let search_bar = document.getElementsByClassName("search_bar")[0];
 let paginationList = document.getElementById("pagination-list");
 let searchInput = document.getElementById("search-input");
 let searchButton = document.getElementById("search-button");
-
-let currentPage = 1;
-let productsPerPage = parseInt(dropdownsize.value);
 let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
-let currentProducts = [];
+let selectedDropdownValue = sessionStorage.getItem("selectedDropdownValue");
+let currentPage = parseInt(sessionStorage.getItem("currentPage")) || 1;
+let storedCurrentProducts = sessionStorage.getItem("currentProducts");
+let currentProducts;
 let productsList = [];
 let totalPages;
 let recordsPerPage;
 
 window.addEventListener("DOMContentLoaded", () => {
   window.scrollTo({ top: 0 });
-  paginationList = document.getElementById("pagination-list");
+  currentPage = parseInt(sessionStorage.getItem("currentPage")) || 1;
+  currentProducts = storedCurrentProducts ? JSON.parse(storedCurrentProducts) : [];
   renderPagination(totalPages, currentPage);
-});
-
-function initializeApp() {
-  paginationList = document.getElementById("pagination-list");
-
   renderProducts(currentProducts);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  initializeApp();
-
-  setTimeout(() => {
-    renderPagination(totalPages, currentPage);
-  }, 100);
 });
 
 (async function () {
   try {
-    const response = await fetch("https://dummyjson.com/products");
-    const data = await response.json();
+    let response = await fetch("https://dummyjson.com/products");
+    let data = await response.json();
     productsList = data.products;
     imagesContainer();
   } catch (error) {
@@ -89,6 +77,12 @@ function renderProducts(productsList) {
   }
 }
 
+let selectedValue = sessionStorage.getItem("selectedDropdownValue");
+if (selectedValue) {
+  dropdownsize.value = selectedValue;
+  productsPerPage = parseInt(selectedValue, 10);
+}
+
 dropdownsize.onchange = function () {
   recordsPerPage = dropdownsize.value;
   productsPerPage = parseInt(recordsPerPage, 10);
@@ -96,6 +90,10 @@ dropdownsize.onchange = function () {
   currentProducts = productsList.slice(0, recordsPerPage);
   renderProducts(currentProducts);
   renderPagination(totalPages, currentPage);
+  sessionStorage.setItem("selectedDropdownValue", dropdownsize.value);
+  // sessionStorage.setItem("currentProducts", currentProducts);
+  sessionStorage.setItem("currentPage", currentPage);
+  sessionStorage.setItem("currentProducts", JSON.stringify(currentProducts));
 };
 
 function performSearch(searchTerm) {
@@ -156,6 +154,7 @@ function renderPagination(totalPages, currentPage) {
         currentProducts = productsList.slice(startIndex, endIndex);
         renderProducts(currentProducts);
         renderPagination(totalPages, currentPage);
+        sessionStorage.setItem("currentPage", currentPage);
       });
     });
 
@@ -166,6 +165,7 @@ function renderPagination(totalPages, currentPage) {
       e.preventDefault();
       if (currentPage > 1) {
         currentPage--;
+        sessionStorage.setItem("currentPage", currentPage);
         let startIndex = (currentPage - 1) * productsPerPage;
         let endIndex = startIndex + productsPerPage;
         currentProducts = productsList.slice(startIndex, endIndex);
@@ -173,6 +173,7 @@ function renderPagination(totalPages, currentPage) {
         renderPagination(totalPages, currentPage);
       }
     });
+  
     if (currentPage === 1) {
       prevButton.style.display = "none";
     }
@@ -181,6 +182,7 @@ function renderPagination(totalPages, currentPage) {
       e.preventDefault();
       if (currentPage < totalPages) {
         currentPage++;
+        sessionStorage.setItem("currentPage", currentPage);
         let startIndex = (currentPage - 1) * productsPerPage;
         let endIndex = startIndex + productsPerPage;
         currentProducts = productsList.slice(startIndex, endIndex);
@@ -188,6 +190,7 @@ function renderPagination(totalPages, currentPage) {
         renderPagination(totalPages, currentPage);
       }
     });
+  
     if (currentPage === totalPages) {
       nextButton.style.display = "none";
     }
@@ -200,7 +203,7 @@ function downloadImage(imageUrl, title) {
   fetch(imageUrl)
     .then((response) => response.blob())
     .then((blob) => {
-      const downloadLink = document.createElement("a");
+      let downloadLink = document.createElement("a");
       downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = `${title}.png`;
       downloadLink.click();
@@ -212,12 +215,12 @@ function downloadImage(imageUrl, title) {
 }
 
 function addToCart(id, price, thumbnail, description, title) {
-  const existingProduct = cartItems.find((item) => item.id === id);
+  let existingProduct = cartItems.find((item) => item.id === id);
 
   if (existingProduct) {
     existingProduct.quantity++;
   } else {
-    const cartProduct = {
+    let cartProduct = {
       id: id,
       price: price,
       quantity: 1,
@@ -234,6 +237,6 @@ function addToCart(id, price, thumbnail, description, title) {
 }
 
 function redirectToCart() {
-  const url = "cart.html";
+  let url = "cart.html";
   window.location.href = url;
 }
