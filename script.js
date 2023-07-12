@@ -1,24 +1,27 @@
 let content = document.getElementById("mainContainer");
 let dropdownsize = document.getElementById("dropdownsize");
 let search_bar = document.getElementsByClassName("search_bar")[0];
-let paginationList = document.getElementById("pagination-list");
+let paginationList = document.querySelector("#pagination-list");
 let searchInput = document.getElementById("search-input");
 let searchButton = document.getElementById("search-button");
 let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 let selectedDropdownValue = sessionStorage.getItem("selectedDropdownValue");
 let currentPage = parseInt(sessionStorage.getItem("currentPage")) || 1;
 let storedCurrentProducts = sessionStorage.getItem("currentProducts");
-let currentProducts;
 let productsList = [];
-let totalPages;
-let recordsPerPage;
+let recordsPerPage = dropdownsize.value;
+let currentProducts = productsList.slice(0, recordsPerPage);
+let productsPerPage = parseInt(recordsPerPage);
+let totalPages = Math.ceil(productsList.length / productsPerPage);
 
 window.addEventListener("DOMContentLoaded", () => {
   window.scrollTo({ top: 0 });
   currentPage = parseInt(sessionStorage.getItem("currentPage")) || 1;
-  currentProducts = storedCurrentProducts ? JSON.parse(storedCurrentProducts) : [];
-  renderPagination(totalPages, currentPage);
-  renderProducts(currentProducts);
+  currentProducts = storedCurrentProducts
+    ? JSON.parse(storedCurrentProducts)
+    : [];
+    renderProducts(currentProducts);
+    // renderPagination(totalPages, currentPage);
 });
 
 (async function () {
@@ -26,7 +29,10 @@ window.addEventListener("DOMContentLoaded", () => {
     let response = await fetch("https://dummyjson.com/products");
     let data = await response.json();
     productsList = data.products;
-    imagesContainer();
+    recordsPerPage = dropdownsize.value;
+    productsPerPage = parseInt(recordsPerPage);
+    totalPages = Math.ceil(productsList.length / productsPerPage);
+    currentProducts = productsList.slice(0, recordsPerPage);
   } catch (error) {
     console.log("Error:", error);
   }
@@ -35,9 +41,13 @@ window.addEventListener("DOMContentLoaded", () => {
 })();
 
 function imagesContainer() {
-  totalPages = Math.ceil(productsList.length / productsPerPage);
   recordsPerPage = dropdownsize.value;
+  productsPerPage = parseInt(recordsPerPage);
+  totalPages = Math.ceil(productsList.length / productsPerPage);
   currentProducts = productsList.slice(0, recordsPerPage);
+  currentProducts = storedCurrentProducts
+    ? JSON.parse(storedCurrentProducts)
+    : [];
   renderProducts(currentProducts);
   renderPagination(totalPages, currentPage);
 }
@@ -77,24 +87,21 @@ function renderProducts(productsList) {
   }
 }
 
-let selectedValue = sessionStorage.getItem("selectedDropdownValue");
-if (selectedValue) {
-  dropdownsize.value = selectedValue;
-  productsPerPage = parseInt(selectedValue, 10);
-}
-
 dropdownsize.onchange = function () {
+  currentPage = 1;
   recordsPerPage = dropdownsize.value;
-  productsPerPage = parseInt(recordsPerPage, 10);
+  productsPerPage = parseInt(recordsPerPage);
   totalPages = Math.ceil(productsList.length / productsPerPage);
   currentProducts = productsList.slice(0, recordsPerPage);
   renderProducts(currentProducts);
   renderPagination(totalPages, currentPage);
   sessionStorage.setItem("selectedDropdownValue", dropdownsize.value);
-  // sessionStorage.setItem("currentProducts", currentProducts);
-  sessionStorage.setItem("currentPage", currentPage);
-  sessionStorage.setItem("currentProducts", JSON.stringify(currentProducts));
 };
+
+if (selectedDropdownValue) {
+  dropdownsize.value = selectedDropdownValue;
+  productsPerPage = parseInt(selectedDropdownValue);
+}
 
 function performSearch(searchTerm) {
   let filteredProducts = productsList.filter((product) => {
@@ -124,78 +131,99 @@ searchButton.onclick = function () {
 };
 
 function renderPagination(totalPages, currentPage) {
-  try {
-    let paginationHTML = "";
+  let paginationHTML = "";
 
-    if (totalPages > 0) {
-      paginationHTML += `<li class="prev"><a href="#" id="prev">&#139;</a></li>`;
+  if (totalPages > 0) {
+    paginationHTML += `<li class="prev"><a href="#" id="prev">&#139;</a></li>`;
+  }
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === currentPage) {
+      paginationHTML += `<li class="list active"><a href="#" data-page="${i}">${i}</a></li>`;
+    } else {
+      paginationHTML += `<li class="list"><a href="#" data-page="${i}">${i}</a></li>`;
     }
+  }
+  paginationHTML += `<li class="next"><a href="#" id="next">&#155;</a></li>`;
+  paginationList.innerHTML = paginationHTML;
 
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === currentPage) {
-        paginationHTML += `<li class="list active"><a href="#" data-page="${i}">${i}</a></li>`;
-      } else {
-        paginationHTML += `<li class="list"><a href="#" data-page="${i}">${i}</a></li>`;
-      }
-    }
-    paginationHTML += `<li class="next"><a href="#" id="next">&#155;</a></li>`;
-    paginationList.innerHTML = paginationHTML;
-
-    let pageLinks = paginationList.querySelectorAll("a[data-page]");
-    pageLinks.forEach((link) => {
-      link.addEventListener("click", function (e) {
-        e.preventDefault();
-        window.scrollTo({ top: 0 });
-
-        let clickedPage = parseInt(e.target.getAttribute("data-page"));
-        currentPage = clickedPage;
-        let startIndex = (currentPage - 1) * productsPerPage;
-        let endIndex = startIndex + productsPerPage;
-        currentProducts = productsList.slice(startIndex, endIndex);
-        renderProducts(currentProducts);
-        renderPagination(totalPages, currentPage);
-        sessionStorage.setItem("currentPage", currentPage);
-      });
-    });
-
-    let prevButton = document.getElementById("prev");
-    let nextButton = document.getElementById("next");
-
-    prevButton.addEventListener("click", function (e) {
+  let pageLinks = paginationList.querySelectorAll("a[data-page]");
+  pageLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
       e.preventDefault();
+      window.scrollTo({ top: 0 });
+
+      let clickedPage = parseInt(e.target.getAttribute("data-page"));
+      currentPage = clickedPage;
+      sessionStorage.setItem("currentPage", currentPage);
+      let startIndex = (currentPage - 1) * productsPerPage;
+      let endIndex = startIndex + productsPerPage;
+      currentProducts = productsList.slice(startIndex, endIndex);
+      sessionStorage.setItem(
+        "currentProducts",
+        JSON.stringify(currentProducts)
+      );
+      renderProducts(currentProducts);
+      renderPagination(totalPages, currentPage);
+
+    });
+  });
+
+  let prevButton = document.getElementById("prev");
+  let nextButton = document.getElementById("next");
+
+  if (prevButton) {
+    prevButton.addEventListener("click", function () {
+      e.preventDefault();
+      window.scrollTo({ top: 0 });
       if (currentPage > 1) {
         currentPage--;
         sessionStorage.setItem("currentPage", currentPage);
         let startIndex = (currentPage - 1) * productsPerPage;
         let endIndex = startIndex + productsPerPage;
         currentProducts = productsList.slice(startIndex, endIndex);
+        sessionStorage.setItem(
+          "currentProducts",
+          JSON.stringify(currentProducts)
+        );
         renderProducts(currentProducts);
         renderPagination(totalPages, currentPage);
+
       }
     });
-  
-    if (currentPage === 1) {
+  }
+
+  if (currentPage === 1) {
+    if (prevButton) {
       prevButton.style.display = "none";
     }
+  } else {
+    prevButton.style.display = "block";
+  }
 
-    nextButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (currentPage < totalPages) {
-        currentPage++;
-        sessionStorage.setItem("currentPage", currentPage);
-        let startIndex = (currentPage - 1) * productsPerPage;
-        let endIndex = startIndex + productsPerPage;
-        currentProducts = productsList.slice(startIndex, endIndex);
-        renderProducts(currentProducts);
-        renderPagination(totalPages, currentPage);
-      }
-    });
-  
-    if (currentPage === totalPages) {
-      nextButton.style.display = "none";
+  nextButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0 });
+    if (currentPage < totalPages) {
+      currentPage++;
+      sessionStorage.setItem("currentPage", currentPage);
+      let startIndex = (currentPage - 1) * productsPerPage;
+      let endIndex = startIndex + productsPerPage;
+      currentProducts = productsList.slice(startIndex, endIndex);
+      sessionStorage.setItem(
+        "currentProducts",
+        JSON.stringify(currentProducts)
+      );
+      renderProducts(currentProducts);
+      renderPagination(totalPages, currentPage);
+
     }
-  } catch {
-    console.error("Error in renderPagination:", error);
+  });
+
+  if (currentPage === totalPages) {
+    nextButton.style.display = "none";
+  } else {
+    nextButton.style.display = "block";
   }
 }
 

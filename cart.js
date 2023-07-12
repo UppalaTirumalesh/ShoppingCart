@@ -6,6 +6,11 @@ let checkoutButton = document.getElementById("checkoutButton");
 let goBackButton = document.getElementById("goBackButton");
 let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
+// let testTime = setTimeout(()=> {console.log("hello");}, 50000);
+// console.log(testTime);
+// let testTime2 = setTimeout(()=> {console.log("hello");}, 80000);
+// console.log(testTime2);
+
 function renderCartItems() {
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
@@ -45,8 +50,7 @@ function renderCartItems() {
 
       let decreaseButton = document.createElement('button');
       decreaseButton.innerText = '-';
-      decreaseButton.style.padding= '5px';
-      decreaseButton.style.marginRight= '5px';
+      decreaseButton.classList.add('cart-product-decrease');
       decreaseButton.addEventListener('click', () => {
         let newQuantity = Math.max(1, product.quantity - 1);
         updateCart(product.id, newQuantity);
@@ -65,8 +69,7 @@ function renderCartItems() {
 
       let increaseButton = document.createElement('button');
       increaseButton.innerText = '+';
-      increaseButton.style.padding= '5px';
-      increaseButton.style.marginLeft= '5px';
+      increaseButton.classList.add('cart-product-increase');
       increaseButton.addEventListener('click', () => {
         let newQuantity = product.quantity + 1;
         updateCart(product.id, newQuantity);
@@ -108,18 +111,20 @@ function clearSessionStorageAndHideCart() {
   checkoutButton.style.display = "none";
 }
 
+// debounce
 function resetinactivityTime() {
   clearTimeout(inactivityTime);
   inactivityTime = setTimeout(clearSessionStorageAndHideCart, 50000);
+  console.log(inactivityTime);
   calculateCartTotal();
   renderCartItems();
 }
 
-window.addEventListener("mousemove", resetinactivityTime);
+window.addEventListener("mousemove",(e) =>{e.preventDefault();}, resetinactivityTime);
 window.addEventListener("keydown", resetinactivityTime);
 window.addEventListener("click", resetinactivityTime);
 
-resetinactivityTime();
+// resetinactivityTime();
 
 window.addEventListener("DOMContentLoaded", () => {
   if (cartItems.length === 0) {

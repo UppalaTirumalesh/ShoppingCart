@@ -68,6 +68,18 @@ h1{
    width:230px;
 }
 
+.cart-product-increase{
+  padding: 0px 30px;
+  margin-left: 10px;
+  font-size: 22px;
+}
+
+.cart-product-decrease{
+  padding: 0px 30px;
+  margin-right: 10px;
+  font-size: 22px;
+}
+
 .go-back-button {
   position: fixed;
   top: 20px;
