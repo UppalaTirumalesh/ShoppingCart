@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
     totalPages = Math.ceil(productsList.length / productsPerPage);
     currentProducts = storedCurrentProducts
     ? JSON.parse(storedCurrentProducts)
-    : [];
+    : productsList.slice(0, recordsPerPage);
   } catch (error) {
     console.log("Error:", error);
   }
