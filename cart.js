@@ -6,11 +6,6 @@ let checkoutButton = document.getElementById("checkoutButton");
 let goBackButton = document.getElementById("goBackButton");
 let cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
-// let testTime = setTimeout(()=> {console.log("hello");}, 50000);
-// console.log(testTime);
-// let testTime2 = setTimeout(()=> {console.log("hello");}, 80000);
-// console.log(testTime2);
-
 function renderCartItems() {
   if (cartItems.length === 0) {
     cartContainer.innerHTML = '<h1 class="no-data">Your cart is empty</h1>';
@@ -19,66 +14,66 @@ function renderCartItems() {
     cartContainer.innerHTML = "";
 
     cartItems.forEach((product) => {
-      let productElement = document.createElement('div');
-      productElement.classList.add('cart-product');
+      let productElement = document.createElement("div");
+      productElement.classList.add("cart-product");
 
-      let thumbnailElement = document.createElement('img');
-      thumbnailElement.classList.add('cart-product-thumbnail');
+      let thumbnailElement = document.createElement("img");
+      thumbnailElement.classList.add("cart-product-thumbnail");
       thumbnailElement.src = product.thumbnail;
-      thumbnailElement.alt = 'Image failed to load';
+      thumbnailElement.alt = "Image failed to load";
 
-      let detailsElement = document.createElement('div');
-      detailsElement.classList.add('cart-product-details');
+      let detailsElement = document.createElement("div");
+      detailsElement.classList.add("cart-product-details");
 
-      let titleElement = document.createElement('h2');
+      let titleElement = document.createElement("h2");
       titleElement.innerText = product.title;
 
-      let descriptionElement = document.createElement('p');
-      descriptionElement.classList.add('cart-product-description');
+      let descriptionElement = document.createElement("p");
+      descriptionElement.classList.add("cart-product-description");
       descriptionElement.innerText = product.description;
 
-      let priceElement = document.createElement('h4');
-      priceElement.classList.add('cart-product-price');
+      let priceElement = document.createElement("h4");
+      priceElement.classList.add("cart-product-price");
       priceElement.innerText = `Price: $${product.price}`;
 
-      let quantityElement = document.createElement('div');
-      quantityElement.classList.add('cart-product-quantity');
+      let quantityElement = document.createElement("div");
+      quantityElement.classList.add("cart-product-quantity");
 
-      let quantityLabelElement = document.createElement('label');
-      quantityLabelElement.setAttribute('for', `quantity-${product.id}`);
-      quantityLabelElement.innerText = 'Quantity: ';
+      let quantityLabelElement = document.createElement("label");
+      quantityLabelElement.setAttribute("for", `quantity-${product.id}`);
+      quantityLabelElement.innerText = "Quantity: ";
 
-      let decreaseButton = document.createElement('button');
-      decreaseButton.innerText = '-';
-      decreaseButton.classList.add('cart-product-decrease');
-      decreaseButton.addEventListener('click', () => {
+      let decreaseButton = document.createElement("button");
+      decreaseButton.innerText = "-";
+      decreaseButton.classList.add("cart-product-decrease");
+      decreaseButton.addEventListener("click", () => {
         let newQuantity = Math.max(1, product.quantity - 1);
         updateCart(product.id, newQuantity);
       });
 
-      let quantityInput = document.createElement('input');
-      quantityInput.setAttribute('type', 'number');
-      quantityInput.setAttribute('min', '1');
-      quantityInput.setAttribute('value', product.quantity);
-      quantityInput.setAttribute('id', `quantity-${product.id}`);
-      quantityInput.style.width = '50px';
-      quantityInput.addEventListener('input', (e) => {
+      let quantityInput = document.createElement("input");
+      quantityInput.setAttribute("type", "number");
+      quantityInput.setAttribute("min", "1");
+      quantityInput.classList.add("cart-product-quantityInput");
+      quantityInput.setAttribute("value", product.quantity);
+      quantityInput.setAttribute("id", `quantity-${product.id}`);
+      quantityInput.addEventListener("input", (e) => {
         let newQuantity = parseInt(e.target.value);
         updateCart(product.id, newQuantity);
       });
 
-      let increaseButton = document.createElement('button');
-      increaseButton.innerText = '+';
-      increaseButton.classList.add('cart-product-increase');
-      increaseButton.addEventListener('click', () => {
+      let increaseButton = document.createElement("button");
+      increaseButton.innerText = "+";
+      increaseButton.classList.add("cart-product-increase");
+      increaseButton.addEventListener("click", () => {
         let newQuantity = product.quantity + 1;
         updateCart(product.id, newQuantity);
       });
 
-      let removeButton = document.createElement('button');
-      removeButton.classList.add('cart-product-remove');
-      removeButton.innerText = 'Remove';
-      removeButton.addEventListener('click', () => {
+      let removeButton = document.createElement("button");
+      removeButton.classList.add("cart-product-remove");
+      removeButton.innerText = "Remove";
+      removeButton.addEventListener("click", () => {
         removeFromCart(product.id);
       });
 
@@ -120,7 +115,13 @@ function resetinactivityTime() {
   renderCartItems();
 }
 
-window.addEventListener("mousemove",(e) =>{e.preventDefault();}, resetinactivityTime);
+window.addEventListener(
+  "mousemove",
+  (e) => {
+    e.preventDefault();
+  },
+  resetinactivityTime
+);
 window.addEventListener("keydown", resetinactivityTime);
 window.addEventListener("click", resetinactivityTime);
 

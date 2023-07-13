@@ -238,8 +238,9 @@ input, select {
   }
 
   .go-back-button {
-    margin-top: 20px;
+    margin : 20px 10px 0px 0px;
     position: static;
+    float: right;
   }
 }
 
@@ -249,8 +250,9 @@ input, select {
   }
 
   .go-back-button {
-    margin-top: 20px;
+    margin : 20px 10px 0px 0px;
     position: static;
+    float: right;
   }
 }
 
@@ -260,8 +262,9 @@ input, select {
   }
 
   .go-back-button {
-    margin-top: 20px;
+    margin : 20px 10px 0px 0px;
     position: static;
+    float: right;
   }
 }
 

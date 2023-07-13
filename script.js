@@ -10,7 +10,9 @@ let currentPage = parseInt(sessionStorage.getItem("currentPage")) || 1;
 let storedCurrentProducts = sessionStorage.getItem("currentProducts");
 let productsList = [];
 let recordsPerPage = dropdownsize.value;
-let currentProducts = productsList.slice(0, recordsPerPage);
+let currentProducts = storedCurrentProducts
+? JSON.parse(storedCurrentProducts)
+: [];
 let productsPerPage = parseInt(recordsPerPage);
 let totalPages = Math.ceil(productsList.length / productsPerPage);
 
@@ -21,7 +23,7 @@ window.addEventListener("DOMContentLoaded", () => {
     ? JSON.parse(storedCurrentProducts)
     : [];
     renderProducts(currentProducts);
-    // renderPagination(totalPages, currentPage);
+    
 });
 
 (async function () {
@@ -32,7 +34,9 @@ window.addEventListener("DOMContentLoaded", () => {
     recordsPerPage = dropdownsize.value;
     productsPerPage = parseInt(recordsPerPage);
     totalPages = Math.ceil(productsList.length / productsPerPage);
-    currentProducts = productsList.slice(0, recordsPerPage);
+    currentProducts = storedCurrentProducts
+    ? JSON.parse(storedCurrentProducts)
+    : [];
   } catch (error) {
     console.log("Error:", error);
   }
@@ -172,8 +176,8 @@ function renderPagination(totalPages, currentPage) {
   let prevButton = document.getElementById("prev");
   let nextButton = document.getElementById("next");
 
-  if (prevButton) {
-    prevButton.addEventListener("click", function () {
+  // if (prevButton) {
+    prevButton.addEventListener("click", function (e) {
       e.preventDefault();
       window.scrollTo({ top: 0 });
       if (currentPage > 1) {
@@ -188,15 +192,13 @@ function renderPagination(totalPages, currentPage) {
         );
         renderProducts(currentProducts);
         renderPagination(totalPages, currentPage);
-
+        sessionStorage.setItem("currentPage", currentPage);
       }
     });
-  }
+  // }
 
   if (currentPage === 1) {
-    if (prevButton) {
-      prevButton.style.display = "none";
-    }
+      prevButton.style.display = "";
   } else {
     prevButton.style.display = "block";
   }

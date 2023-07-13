@@ -24,12 +24,11 @@
   <button class="go-back-button" id="goBackButton">Go to Cart Page</button>
 
   <div class="container">
-    <h1 class="billing-heading" id="billingPageHeading">Billing Page</h1>
-
     <div class="billing-container" id="billingContainer">
+      <h1 class="billing-heading" id="billingPageHeading">Billing Page</h1>
       <h3>Billing Address</h3>
       <form>
-        <label for="fname" ><i class="fa fa-user"></i> First Name</label>
+        <label for="fname"><i class="fa fa-user"></i> First Name</label>
         <input type="text" id="fname" name="firstname" placeholder="Enter First Name" required>
         <label for="lname"><i class="fa fa-user"></i> Last Name</label>
         <input type="text" id="lname" name="lastname" placeholder="Enter Last Name" required>
@@ -64,7 +63,7 @@
 
 
     <div class="payment-details" id="paymentContainer" style="display: none;">
-      <h1 style="text-align: center;">Payment Page</h1><br><br><br><br>
+      <h1 style="text-align: center;">Payment Page</h1><br><br>
       <h3>Payment Details</h3><br>
       <h4>Choose a payment option:</h4><br>
       <form>
@@ -78,8 +77,8 @@
         <label for="cashOnDelivery">Cash on Delivery</label><br><br>
         <input type="radio" id="creditCardAndDebitCard" name="payment" value="creditCardAndDebitCard" required>
         <label for="creditCardAndDebitCard">CreditCardAndDebitCard</label><br><br>
-          <button type="button" id="backButton1" class="backButton">BackButton</button>
-          <button type="button" id="confirm2" style="display: none">Proceed To Pay</button>
+        <button type="button" id="backButton1" class="backButton">BackButton</button>
+        <button type="button" id="confirm2" style="display: none">Proceed To Pay</button>
 
         <div class="payment-container" id="paymentCards" style="display: none">
           <h4>Accepted Cards</h4><br>
@@ -123,9 +122,9 @@
         <span class="close">&times;</span>
         <h4>Shipping details will share as soon as possible.</h4><br><br>
         <input type="radio" id="yesValue" name="selection" value="yesValue" required>
-          <label for="yesValue">yes</label><br><br>
-          <input type="radio" id="noValue" name="selection" value="noValue" required>
-          <label for="noValue">no</label><br><br>
+        <label for="yesValue">yes</label><br><br>
+        <input type="radio" id="noValue" name="selection" value="noValue" required>
+        <label for="noValue">no</label><br><br>
         <button id="goToShoppingButton">Go to Shopping</button>
       </div>
     </div>
@@ -138,7 +137,7 @@
       </div>
     </div>
   </div>
-  <script src="billing.js"></script>
+  <script src="./billing.js"></script>
 </body>
 
 </html>
