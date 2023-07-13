@@ -21,7 +21,7 @@ window.addEventListener("DOMContentLoaded", () => {
   currentPage = parseInt(sessionStorage.getItem("currentPage")) || 1;
   currentProducts = storedCurrentProducts
     ? JSON.parse(storedCurrentProducts)
-    : [];
+    : productsList.slice(0, recordsPerPage);
     renderProducts(currentProducts);
     
 });
