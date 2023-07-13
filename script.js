@@ -176,7 +176,6 @@ function renderPagination(totalPages, currentPage) {
   let prevButton = document.getElementById("prev");
   let nextButton = document.getElementById("next");
 
-  // if (prevButton) {
     prevButton.addEventListener("click", function (e) {
       e.preventDefault();
       window.scrollTo({ top: 0 });
@@ -195,10 +194,9 @@ function renderPagination(totalPages, currentPage) {
         sessionStorage.setItem("currentPage", currentPage);
       }
     });
-  // }
 
   if (currentPage === 1) {
-      prevButton.style.display = "";
+      prevButton.style.display = "none";
   } else {
     prevButton.style.display = "block";
   }
