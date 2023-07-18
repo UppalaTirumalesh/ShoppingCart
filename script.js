@@ -23,7 +23,6 @@ window.addEventListener("DOMContentLoaded", () => {
     ? JSON.parse(storedCurrentProducts)
     : productsList.slice(0, recordsPerPage);
     renderProducts(currentProducts);
-    
 });
 
 (async function () {

@@ -516,12 +516,14 @@ function showModal() {
       // confirmationContainer.style.display = 'none';
       placeOrder();
       closeModalFunction();
+      updateProgressBar(75);
     }
   });
 
   noValue.addEventListener("click", () => {
     if (noValue.checked) {
       closeModalFunction();
+      updateProgressBar(47);
     }
   });
 }
@@ -532,5 +534,5 @@ function showModal2() {
 
 function closeModalFunction() {
   modal.style.display = "none";
-  updateProgressBar(72);
+  updateProgressBar(47);
 }

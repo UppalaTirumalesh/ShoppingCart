@@ -52,15 +52,15 @@ function renderCartItems() {
       });
 
       let quantityInput = document.createElement("input");
-      quantityInput.setAttribute("type", "number");
+      // quantityInput.setAttribute("type", "number");
       quantityInput.setAttribute("min", "1");
       quantityInput.classList.add("cart-product-quantityInput");
       quantityInput.setAttribute("value", product.quantity);
       quantityInput.setAttribute("id", `quantity-${product.id}`);
-      quantityInput.addEventListener("input", (e) => {
-        let newQuantity = parseInt(e.target.value);
-        updateCart(product.id, newQuantity);
-      });
+      // quantityInput.addEventListener("input", (e) => {
+      //   let newQuantity = parseInt(e.target.value);
+        // updateCart(product.id, newQuantity);
+      // });
 
       let increaseButton = document.createElement("button");
       increaseButton.innerText = "+";
