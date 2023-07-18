@@ -17,6 +17,9 @@ let confirmButton3 = document.getElementById("confirm3");
 let billingContainer = document.getElementById("billingContainer");
 let paymentContainer = document.getElementById("paymentContainer");
 let confirmationContainer = document.getElementById("confirmationContainer");
+let orderConfirmationPageContainer = document.getElementById(
+  "orderConfirmationPageContainer"
+);
 let progress = document.querySelector(".progress");
 let googlepay = document.getElementById("googlepay");
 let phonepay = document.getElementById("phonepay");
@@ -37,7 +40,7 @@ window.addEventListener("DOMContentLoaded", () => {
 cashOnDelivery.addEventListener("click", () => {
   if (cashOnDelivery.checked) {
     confirmButton2.style.display = "block";
-    backButton[0].style.display = 'block';
+    backButton[0].style.display = "block";
     paymentCards.style.display = "none";
   } else {
     confirmButton2.style.display = "none";
@@ -47,9 +50,8 @@ cashOnDelivery.addEventListener("click", () => {
 googlepay.addEventListener("click", () => {
   if (googlepay.checked) {
     confirmButton2.style.display = "block";
-    backButton[0].style.display = 'block';
+    backButton[0].style.display = "block";
     paymentCards.style.display = "none";
-
   } else {
     confirmButton2.style.display = "none";
   }
@@ -58,7 +60,7 @@ googlepay.addEventListener("click", () => {
 phonepay.addEventListener("click", () => {
   if (phonepay.checked) {
     confirmButton2.style.display = "block";
-    backButton[0].style.display = 'block';
+    backButton[0].style.display = "block";
     paymentCards.style.display = "none";
   } else {
     confirmButton2.style.display = "none";
@@ -68,7 +70,7 @@ phonepay.addEventListener("click", () => {
 paytm.addEventListener("click", () => {
   if (paytm.checked) {
     confirmButton2.style.display = "block";
-    backButton[0].style.display = 'block';
+    backButton[0].style.display = "block";
     paymentCards.style.display = "none";
   } else {
     confirmButton2.style.display = "none";
@@ -76,49 +78,51 @@ paytm.addEventListener("click", () => {
 });
 
 backButton[0].addEventListener("click", () => {
-  paymentContainer.style.display = 'none';
-  billingContainer.style.display = 'block';
+  paymentContainer.style.display = "none";
+  billingContainer.style.display = "block";
   updateProgressBar(0);
 });
 
 backButton[1].addEventListener("click", () => {
-  paymentContainer.style.display = 'none';
-  billingContainer.style.display = 'block';
+  paymentContainer.style.display = "none";
+  billingContainer.style.display = "block";
   updateProgressBar(0);
 });
 
 backButton3.addEventListener("click", () => {
   confirmationContainer.style.display = "none";
-  paymentContainer.style.display = 'block';
+  paymentContainer.style.display = "block";
   updateProgressBar(23);
 });
 
 confirmButton1.addEventListener("click", () => {
   if (validateForm()) {
-    billingContainer.style.display = 'none';
-    paymentContainer.style.display = 'block';
+    billingContainer.style.display = "none";
+    paymentContainer.style.display = "block";
+    confirmationContainer.style.display = "none";
     updateProgressBar(23);
   }
 });
 
 confirmButton2.addEventListener("click", () => {
-  paymentContainer.style.display = 'none';
+  paymentContainer.style.display = "none";
   confirmationContainer.style.display = "block";
+  orderConfirmationPageContainer.style.display = "block";
   updateProgressBar(47);
 });
 
 confirmButton3.addEventListener("click", () => {
   if (validateForm2()) {
-    paymentContainer.style.display = 'none';
+    paymentContainer.style.display = "none";
     confirmationContainer.style.display = "block";
     updateProgressBar(47);
-  } 
+  }
 });
 
 checkboxProgressBar.addEventListener("change", () => {
   if (checkboxProgressBar.checked) {
     placeOrderButton.style.display = "block";
-  } 
+  }
 });
 
 stateSelect.addEventListener("change", () => {
@@ -163,9 +167,9 @@ creditCardAndDebitCard.addEventListener("click", () => {
   if (creditCardAndDebitCard.checked) {
     paymentCards.style.display = "block";
     confirmButton2.style.display = "none";
-    backButton[0].style.display = 'none';
+    backButton[0].style.display = "none";
   } else {
-    backButton[0].style.display = 'block';
+    backButton[0].style.display = "block";
     paymentCards.style.display = "none";
   }
 });
@@ -324,7 +328,7 @@ function placeOrder() {
   let billingAddress = getBillingAddress();
   let paymentMethod = getPaymentMethod();
   let orderDetails = getOrderDetails();
-  
+
   sessionStorage.setItem("orderDetails", JSON.stringify(orderDetails));
 
   displayOrderSummary(orderDetails, billingAddress, paymentMethod);
@@ -334,13 +338,15 @@ function getBillingAddress() {
   let firstName = document.getElementById("fname").value.trim();
   let lastName = document.getElementById("lname").value.trim();
   let mobileNumber = document.getElementById("mobile").value.trim();
-  let alternateMobileNumber = document.getElementById("alternatemobile").value.trim();
+  let alternateMobileNumber = document
+    .getElementById("alternatemobile")
+    .value.trim();
   let email = document.getElementById("email").value.trim();
   let address = document.getElementById("adr").value.trim();
   let pincode = document.getElementById("pincode").value.trim();
   let state = stateSelect.value;
   let district = districtSelect.value;
-  
+
   return {
     firstName,
     lastName,
@@ -350,13 +356,13 @@ function getBillingAddress() {
     address,
     pincode,
     state,
-    district
+    district,
   };
 }
 
 function getPaymentMethod() {
   let paymentMethod = "";
-  
+
   if (cashOnDelivery.checked) {
     paymentMethod = "Cash on Delivery";
   } else if (googlepay.checked) {
@@ -368,38 +374,48 @@ function getPaymentMethod() {
   } else if (creditCardAndDebitCard.checked) {
     paymentMethod = "Credit Card / Debit Card";
   }
-  
+
   return paymentMethod;
 }
 
 function getOrderDetails() {
-  let orderItems = cartItems.map(item => ({
+  let orderItems = cartItems.map((item) => ({
     id: item.id,
     price: item.price,
     quantity: item.quantity,
     thumbnail: item.thumbnail,
     description: item.description,
-    title: item.title
+    title: item.title,
   }));
-  
-  let totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  
+
+  let totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
   return {
     orderItems,
-    totalPrice
+    totalPrice,
   };
 }
 
 function displayOrderSummary(orderDetails, billingAddress, paymentMethod) {
+  orderConfirmationPageContainer.style.display = "none";
+
+  let elements = document.getElementsByClassName("order-summary-container");
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+
   let orderSummaryContainer = document.createElement("div");
   orderSummaryContainer.classList.add("order-summary-container");
-  
+
   let orderSummaryHeading = document.createElement("h1");
   orderSummaryHeading.textContent = "Order Summary Page";
-  
+
   let billingAddressHeading = document.createElement("h4");
   billingAddressHeading.textContent = "Billing Address";
-  
+
   let billingAddressDetails = document.createElement("p");
   billingAddressDetails.textContent = `First Name: ${billingAddress.firstName}
     Last Name: ${billingAddress.lastName}
@@ -410,20 +426,20 @@ function displayOrderSummary(orderDetails, billingAddress, paymentMethod) {
     Pincode: ${billingAddress.pincode}
     State: ${billingAddress.state}
     District: ${billingAddress.district}`;
-  
+
   let paymentMethodHeading = document.createElement("h4");
   paymentMethodHeading.textContent = "Payment Method";
-  
+
   let paymentMethodDetails = document.createElement("p");
   paymentMethodDetails.textContent = `Payment Method: ${paymentMethod}`;
-  
+
   let orderItemsHeading = document.createElement("h4");
   orderItemsHeading.textContent = "Order Items";
-  
+
   let orderItemsList = document.createElement("ul");
   orderItemsList.classList.add("order-items-list");
-  
-  orderDetails.orderItems.forEach(item => {
+
+  orderDetails.orderItems.forEach((item) => {
     let listItem = document.createElement("li");
     listItem.classList.add("order-item");
     listItem.innerHTML = `<img src="${item.thumbnail}" alt="${item.title}" class="order-item-thumbnail">
@@ -446,7 +462,7 @@ function displayOrderSummary(orderDetails, billingAddress, paymentMethod) {
 
   let totalPrice = document.createElement("h4");
   totalPrice.textContent = `Total Price: $${orderDetails.totalPrice}`;
-  
+
   orderSummaryContainer.appendChild(orderSummaryHeading);
   orderSummaryContainer.appendChild(billingAddressHeading);
   orderSummaryContainer.appendChild(billingAddressDetails);
@@ -459,16 +475,17 @@ function displayOrderSummary(orderDetails, billingAddress, paymentMethod) {
   orderSummaryContainer.appendChild(editButton);
 
   placeOrder.addEventListener("click", () => {
-      showModal2();
-      updateProgressBar(100);
+    showModal2();
+    updateProgressBar(100);
   });
 
   editButton.addEventListener("click", () => {
-    billingContainer.style.display = 'block';
-    confirmationContainer.style.display = 'none';
+    billingContainer.style.display = "block";
+    confirmationContainer.style.display = "none";
+    orderSummaryContainer.style.display = "none";
     updateProgressBar(0);
   });
-  
+
   closeModal2.addEventListener("click", () => {
     modal2.style.display = "none";
   });
@@ -478,9 +495,10 @@ function displayOrderSummary(orderDetails, billingAddress, paymentMethod) {
     modal2.style.display = "none";
     window.location.href = "./index.html";
   });
-  
-  confirmationContainer.innerHTML = "";
-  
+
+  confirmationContainer.style.display = "block";
+  // confirmationContainer.innerHTML ="";
+
   confirmationContainer.appendChild(orderSummaryContainer);
 
   confirmationContainer.scrollIntoView({ behavior: "smooth" });
@@ -495,16 +513,17 @@ function showModal() {
   yesValue.addEventListener("click", () => {
     if (yesValue.checked) {
       sessionStorage.removeItem("cartItems");
+      // confirmationContainer.style.display = 'none';
       placeOrder();
       closeModalFunction();
-    } 
-    });
-    
-    noValue.addEventListener("click", () => {
-      if (noValue.checked) {
-        closeModalFunction();
-      } 
-    });
+    }
+  });
+
+  noValue.addEventListener("click", () => {
+    if (noValue.checked) {
+      closeModalFunction();
+    }
+  });
 }
 
 function showModal2() {
