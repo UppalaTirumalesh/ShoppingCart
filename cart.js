@@ -59,7 +59,7 @@ function renderCartItems() {
       quantityInput.setAttribute("id", `quantity-${product.id}`);
       // quantityInput.addEventListener("input", (e) => {
       //   let newQuantity = parseInt(e.target.value);
-        // updateCart(product.id, newQuantity);
+      // updateCart(product.id, newQuantity);
       // });
 
       let increaseButton = document.createElement("button");
@@ -115,17 +115,10 @@ function resetinactivityTime() {
   renderCartItems();
 }
 
-window.addEventListener(
-  "mousemove",
-  (e) => {
-    e.preventDefault();
-  },
-  resetinactivityTime
-);
+window.addEventListener("mousemove", resetinactivityTime);
 window.addEventListener("keydown", resetinactivityTime);
 window.addEventListener("click", resetinactivityTime);
 
-// resetinactivityTime();
 
 window.addEventListener("DOMContentLoaded", () => {
   if (cartItems.length === 0) {
